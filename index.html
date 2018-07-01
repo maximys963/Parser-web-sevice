@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="style.css" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="main-container">
+<ul class="menu">
+    <li id="start"><a>START</a></li>
+    <li id="pause"><a>PAUSE</a></li>
+    <li id="stop">STOP</li>
+</ul>
+
+    <ul class="addition-menu" id="addition-menu">
+        <li><input id="url-input" type="text" placeholder="Start URL"></li>
+        <li><input id="symbol" type="text" placeholder="Symbol for search"></li>
+        <li><input id="max-count" type="text" placeholder="Max threads count"></li>
+        <li><input id="max-url" type="text" placeholder="Max URL's parse"></li>
+        <div class=button-container>
+            <div id="cancel"><a>Cancel</a></div>
+        <div id="button"><a>OK</a></div>
+        </div>
+    </ul>
+</div>
+<div class="progress" id="progress">progress bar</div>
+    <table class="table" id="table" cellspacing="0">
+    <tr>
+        <th>N</th>
+        <th>Url</th>
+        <th>Status</th>
+        <th>Found usages</th>
+    </tr>
+        <tr>
+            <td>1</td>
+            <td>Lorem ipsum dolor.</td>
+            <td>Lorem ipsum dolor.</td>
+            <td>Lorem ipsum dolor.</td>
+
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Lorem ipsum dolor.</td>
+            <td>Lorem ipsum dolor.</td>
+            <td>Lorem ipsum dolor.</td>
+        </tr>
+
+
+
+    </table>
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

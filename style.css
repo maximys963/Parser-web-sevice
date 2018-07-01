@@ -1,0 +1,148 @@
+body{
+    background: #2d3436;
+}
+.main-container{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.menu{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 0;
+    width: 100%;
+    margin-top: 0;
+    margin-left: 0;
+}
+.menu > li:hover{
+
+}
+.addition-menu{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
+    border: 1px solid gray;
+    width: 276px;
+    height: 200px;
+    align-self: center;
+    padding: 15px 10px 15px 40px;
+    background: whitesmoke;
+}
+.addition-menu > li {
+width: 100%;
+}
+.addition-menu > li > input {
+    width: 90%;
+    height: 20px;
+}
+#cancel > a{
+    margin-right: 25px ;
+    width: 60px;
+    height: 25px;
+    border: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: gray;
+}
+ #button > a {
+   margin-right: 25px ;
+    width: 60px;
+    height: 25px;
+    border: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: gray;
+
+}
+ .button-container{
+     display: flex;
+     width: 100%;
+     flex-direction: row;
+     justify-content: space-between;
+ }
+ #button > a:hover{
+    background-color: darkgrey;
+    color: white;
+}
+#button > a:active{
+    background-color: white;
+    color: lightgray;
+}
+
+#cancel > a:hover{
+    background-color: darkgrey;
+    color: white;
+}
+#cancel > a:active{
+    background-color: darkgrey;
+    color: white;
+}
+
+
+.menu > li{
+    border: 1px solid lightgray;
+    background-color: #2d3436;
+    color: lightgray;
+    width: 33.3%;
+    height: 50px;
+    margin-left: -1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.menu > li:hover{
+    background-color: gray;
+    color: lightgray;
+}
+.menu > li:active{
+    background-color: dimgray;
+    color: white;
+}
+
+table{
+    width: 100%;
+}
+
+td{
+    border: 1px solid darkgrey;
+    text-align: center;
+    color: lightgray;
+}
+th{
+    border: 1px solid darkgrey;
+    text-align: center;
+    background: dimgray;
+    color: lightgray;
+    padding: 10px 20px 10px 20px;
+}
+th:nth-child(1){
+    width: 4%
+}
+th:nth-child(2){
+    width: 66%
+}
+th:nth-child(3){
+    width: 10%
+}
+th:nth-child(4){
+    width: 20%
+}
+.progress{
+    display: flex;
+    width: 99.84%;
+   justify-content: center;
+    align-items: center;
+    border: 2px solid lightgreen;
+    height: 40px;
+    color: lightgray;
+    margin-bottom: 20px;
+}
