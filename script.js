@@ -17,7 +17,8 @@
 //         entriesCount: 21
 //     }
 // ];
-
+let __appstate = "initial";
+let timer;
 let obj;
 let tableRegistry = [{}];
 const ulrinput = document.getElementById("url-input");
@@ -158,33 +159,44 @@ function validation() {
 
         pause.addEventListener('click', Pause);
         function Pause(){
-            let status = document.getElementById("progress");
-            status.innerText = "paused";
-            status.style.color = "#fffa65";
-            status.style.borderColor = "#fffa65"
-        }
-        axios.post('http://localhost:8091/pause', "simpleSession")
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            if(__appstate === "started"){
+                __appstate = "paused";
+                clearInterval(timer);
+                let status = document.getElementById("progress");
+                status.innerText = "paused";
+                status.style.color = "#fffa65";
+                status.style.borderColor = "#fffa65";
 
+                axios.post('http://localhost:8091/pause', "simpleSession")
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+
+        }
         stop.addEventListener('click', Stop);
         function Stop(){
-            let status = document.getElementById("progress");
-            status.innerText = "stoped";
-            status.style.color = "#ff4d4d";
-            status.style.borderColor = "#ff4d4d";
+            if(__appstate === "started" || __appstate === "paused"){
+                __appstate = "stopped";
+                clearInterval(timer);
 
-            axios.post('http://localhost:8091/stop', "simpleSession")
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                let status = document.getElementById("progress");
+                status.innerText = "stoped";
+                status.style.color = "#ff4d4d";
+                status.style.borderColor = "#ff4d4d";
+
+                axios.post('http://localhost:8091/stop', "simpleSession")
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+
 
 
         }
@@ -195,76 +207,107 @@ function validation() {
 }
 start.addEventListener('click', Run);
 function Run(){
+    if(__appstate === "initial" || __appstate === "paused" ){
+        __appstate = "started";
 
-    let status = document.getElementById("progress");
-    status.innerText = "start";
-    status.style.color = "lightgreen";
-
-    if(__validationRegistration.firstInputIsValid && __validationRegistration.secondInputIsValid && __validationRegistration.thirdInputIsValid && __validationRegistration.fourthInputIsValid) {
-        console.log("run");
-
-       // let check =  {
-       //          url: ulrinput.value,
-       //          symbol: symbols.value,
-       //          maxCount: maxcount.value,
-       //          maxUrl: maxurl.value
-       //   };
-
-        axios.post('http://localhost:8091/openNewSession', JSON.stringify({
-            url: ulrinput.value,
-            symbol: symbols.value,
-            maxCount: maxcount.value,
-            maxUrl: maxurl.value
-        }),)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        axios.get('http://localhost:8091/getUpdatedUrl')
-            .then(function (response) {
-                console.log(response);
-                obj = response.data;
-                console.log(obj);
-                return obj
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        obj.forEach((element)=>{
-
-            let checker = tableRegistry.some((writen)=>{
-                return writen.id === element.id
-            });
-
-            if(!checker){
-                tableRegistry.push(element);
-                let table = document.getElementById("table");
-                let mainTR = document.createElement("tr");
-                let numberTD = document.createElement("td");
-                numberTD.innerText = element.id;
-                let urlTD = document.createElement("td");
-                urlTD.innerText = element.url;
-                let statusTD = document.createElement("td");
-                statusTD.innerText = element.status;
-                let foundTD = document.createElement("td");
-                foundTD.innerText = element.entriesCount;
-
-                table.appendChild(mainTR);
-                mainTR.appendChild(numberTD);
-                mainTR.appendChild(urlTD);
-                mainTR.appendChild(statusTD);
-                mainTR.appendChild(foundTD);
-            }
-        });
+        let status = document.getElementById("progress");
+        status.innerText = "start";
+        status.style.color = "lightgreen";
+        status.style.borderColor = "lightgreen";
 
 
+        if(__validationRegistration.firstInputIsValid && __validationRegistration.secondInputIsValid && __validationRegistration.thirdInputIsValid && __validationRegistration.fourthInputIsValid) {
+            console.log("run");
+            __appstate = "started";
+
+            // let check =  {
+            //          url: ulrinput.value,
+            //          symbol: symbols.value,
+            //          maxCount: maxcount.value,
+            //          maxUrl: maxurl.value
+            //   };
+
+            axios.post('http://localhost:8091/openNewSession', JSON.stringify({
+                url: ulrinput.value,
+                symbol: symbols.value,
+                maxCount: maxcount.value,
+                maxUrl: maxurl.value
+            }),)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            timer = setInterval( ()=>{
+                axios.get('http://localhost:8091/getUpdatedUrl')
+                    .then(function (response) {
+                        console.log(response);
+                        obj = response.data;
+                        console.log(obj);
+                        return obj
+                    })
+                    .then( ()=> {
+                        obj.forEach((element)=>{
+
+                            let checker = tableRegistry.some((writen)=>{
+                                return writen.id === element.id
+                            });
+
+                            if(!checker){
+                                tableRegistry.push(element);
+                                let table = document.getElementById("table");
+                                let mainTR = document.createElement("tr");
+                                mainTR.id = element.id;
+                                let numberTD = document.createElement("td");
+                                numberTD.innerText = element.id;
+                                let urlTD = document.createElement("td");
+                                urlTD.innerText = element.url;
+                                let statusTD = document.createElement("td");
+                                statusTD.innerText = element.status;
+                                let foundTD = document.createElement("td");
+                                foundTD.innerText = element.entriesCount;
+
+                                table.appendChild(mainTR);
+                                mainTR.appendChild(numberTD);
+                                mainTR.appendChild(urlTD);
+                                mainTR.appendChild(statusTD);
+                                mainTR.appendChild(foundTD);
+                            }
+
+                            tableRegistry.forEach((updatel)=>{
+                                if(element.id === updatel.id && element.status !== updatel.status){
+
+                                    let changeElement = document.getElementById(element.id).childNodes;
+                                    changeElement[2].innerHTML = element.status;
+                                    changeElement[3].innerHTML = element.entriesCount;
+                                    console.log(changeElement);
+                                    console.log(changeElement[2]);
+                                    console.log(changeElement[3]);
+                                    console.log(element.status);
+                                    console.log(element.status);
 
 
+
+                                }
+
+                            });
+
+                        })}
+                    )
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                console.log("updated");
+
+            }, 1000);
+
+
+        }
     }
+
+
 }
 
 
