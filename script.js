@@ -17,7 +17,7 @@ const obj = [{
         entriesCount: 21
     }
 ];
-
+let tableRegistry = [{}];
 const ulrinput = document.getElementById("url-input");
 const symbols = document.getElementById("symbol");
 const maxcount = document.getElementById("max-count");
@@ -179,22 +179,33 @@ function Run(){
     if(__validationRegistration.firstInputIsValid && __validationRegistration.secondInputIsValid && __validationRegistration.thirdInputIsValid && __validationRegistration.fourthInputIsValid) {
         console.log("run");
         obj.forEach((element)=>{
-            let table = document.getElementById("table");
-            let mainTR = document.createElement("tr");
-            let numberTD = document.createElement("td");
-            numberTD.innerText = element.id;
-            let urlTD = document.createElement("td");
-            urlTD.innerText = element.url;
-            let statusTD = document.createElement("td");
-            statusTD.innerText = element.status;
-            let foundTD = document.createElement("td");
-            foundTD.innerText = element.entriesCount;
 
-            table.appendChild(mainTR);
-            mainTR.appendChild(numberTD);
-            mainTR.appendChild(urlTD);
-            mainTR.appendChild(statusTD);
-            mainTR.appendChild(foundTD);
+            let checker = tableRegistry.some((writen)=>{
+                return writen.id === element.id
+            });
+
+            if(!checker){
+                tableRegistry.push(element);
+                let table = document.getElementById("table");
+                let mainTR = document.createElement("tr");
+                let numberTD = document.createElement("td");
+                numberTD.innerText = element.id;
+                let urlTD = document.createElement("td");
+                urlTD.innerText = element.url;
+                let statusTD = document.createElement("td");
+                statusTD.innerText = element.status;
+                let foundTD = document.createElement("td");
+                foundTD.innerText = element.entriesCount;
+
+                table.appendChild(mainTR);
+                mainTR.appendChild(numberTD);
+                mainTR.appendChild(urlTD);
+                mainTR.appendChild(statusTD);
+                mainTR.appendChild(foundTD);
+            }
+
+
+
 
         });
 
@@ -204,20 +215,72 @@ function Run(){
                 maxCount: maxcount.value,
                 maxUrl: maxurl.value
          };
-        console.log(check);
-
-        axios.post('http://localhost:8091/openNewSession', JSON.stringify({
+        // console.log(  axios.post('http://localhost:8091/openNewSession', JSON.stringify({
+        //     url: ulrinput.value,
+        //     symbol: symbols.value,
+        //     maxCount: maxcount.value,
+        //     maxUrl: maxurl.value
+        // })));
+// first
+        axios.post('http://localhost:8091/openNewSession', {
             url: ulrinput.value,
             symbol: symbols.value,
             maxCount: maxcount.value,
             maxUrl: maxurl.value
-        }))
+        })
             .then(function (response) {
                 console.log(response);
             })
             .catch(function (error) {
                 console.log(error);
             });
+        //second
+        // axios.post('http://localhost:8091/openNewSession', JSON.stringify({
+        //     url: ulrinput.value,
+        //     symbol: symbols.value,
+        //     maxCount: maxcount.value,
+        //     maxUrl: maxurl.value
+        // }))
+        //     .then(function (response) {
+        //         console.log(response);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+
+        // third fetch
+        // const newPost = check =>{
+        //     const options = {
+        //         method: 'POST',
+        //         body: JSON.stringify(check),
+        //         headers: new Headers({
+        //             'Content-Type' : 'application/json'
+        //         })
+        //
+        //     };
+        //     return fetch('http://localhost:8091/openNewSession', options)
+        //         .then( res => res.json())
+        //         .then( res => console.log(res))
+        //         .catch(error => console.error(`Error: ${error}`))
+        //
+        // }
+
+
+        // $.ajax({
+        //     url:'http://localhost:8091/openNewSession',
+        //     type:"POST",
+        //     contentType: "application/json; charset=utf-8",
+        //     data: JSON.stringify(check), //Stringified Json Object
+        //     async: false,    //Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
+        //     cache: false,    //This will force requested pages not to be cached by the browser
+        //     processData:false, //To avoid making query String instead of JSON
+        //     success: function(resposeJsonObject){
+        //        console.log("success")
+        //     }
+        // });
+        //
+
+
     }
 }
 
