@@ -1,22 +1,24 @@
-const obj = [{
-    id: 1,
-    url: 'https://learn.javascript.ru/modifying-document',
-    status: "done",
-    entriesCount: 17
-},
-    {
-        id: 2,
-        url: 'https://github.com/axios/axios',
-        status: "done",
-        entriesCount: 19
-    },
-    {
-        id: 3,
-        url: 'https://flatuicolors.com/palette/tr',
-        status: "done",
-        entriesCount: 21
-    }
-];
+// const obj = [{
+//     id: 1,
+//     url: 'https://learn.javascript.ru/modifying-document',
+//     status: "done",
+//     entriesCount: 17
+// },
+//     {
+//         id: 2,
+//         url: 'https://github.com/axios/axios',
+//         status: "done",
+//         entriesCount: 19
+//     },
+//     {
+//         id: 3,
+//         url: 'https://flatuicolors.com/palette/tr',
+//         status: "done",
+//         entriesCount: 21
+//     }
+// ];
+
+let obj;
 let tableRegistry = [{}];
 const ulrinput = document.getElementById("url-input");
 const symbols = document.getElementById("symbol");
@@ -161,23 +163,77 @@ function validation() {
             status.style.color = "#fffa65";
             status.style.borderColor = "#fffa65"
         }
+        axios.post('http://localhost:8091/pause', "simpleSession")
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
         stop.addEventListener('click', Stop);
         function Stop(){
             let status = document.getElementById("progress");
             status.innerText = "stoped";
             status.style.color = "#ff4d4d";
-            status.style.borderColor = "#ff4d4d"
+            status.style.borderColor = "#ff4d4d";
+
+            axios.post('http://localhost:8091/stop', "simpleSession")
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
 
         }
+
+
 
     }
 }
 start.addEventListener('click', Run);
 function Run(){
 
+    let status = document.getElementById("progress");
+    status.innerText = "start";
+    status.style.color = "lightgreen";
+
     if(__validationRegistration.firstInputIsValid && __validationRegistration.secondInputIsValid && __validationRegistration.thirdInputIsValid && __validationRegistration.fourthInputIsValid) {
         console.log("run");
+
+       // let check =  {
+       //          url: ulrinput.value,
+       //          symbol: symbols.value,
+       //          maxCount: maxcount.value,
+       //          maxUrl: maxurl.value
+       //   };
+
+        axios.post('http://localhost:8091/openNewSession', JSON.stringify({
+            url: ulrinput.value,
+            symbol: symbols.value,
+            maxCount: maxcount.value,
+            maxUrl: maxurl.value
+        }),)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        axios.get('http://localhost:8091/getUpdatedUrl')
+            .then(function (response) {
+                console.log(response);
+                obj = response.data;
+                console.log(obj);
+                return obj
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
         obj.forEach((element)=>{
 
             let checker = tableRegistry.some((writen)=>{
@@ -203,82 +259,9 @@ function Run(){
                 mainTR.appendChild(statusTD);
                 mainTR.appendChild(foundTD);
             }
-
-
-
-
         });
 
-       let check =  {
-                url: ulrinput.value,
-                symbol: symbols.value,
-                maxCount: maxcount.value,
-                maxUrl: maxurl.value
-         };
-        // console.log(  axios.post('http://localhost:8091/openNewSession', JSON.stringify({
-        //     url: ulrinput.value,
-        //     symbol: symbols.value,
-        //     maxCount: maxcount.value,
-        //     maxUrl: maxurl.value
-        // })));
-// first
-        axios.post('http://localhost:8091/openNewSession', {
-            url: ulrinput.value,
-            symbol: symbols.value,
-            maxCount: maxcount.value,
-            maxUrl: maxurl.value
-        })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        //second
-        // axios.post('http://localhost:8091/openNewSession', JSON.stringify({
-        //     url: ulrinput.value,
-        //     symbol: symbols.value,
-        //     maxCount: maxcount.value,
-        //     maxUrl: maxurl.value
-        // }))
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
 
-        // third fetch
-        // const newPost = check =>{
-        //     const options = {
-        //         method: 'POST',
-        //         body: JSON.stringify(check),
-        //         headers: new Headers({
-        //             'Content-Type' : 'application/json'
-        //         })
-        //
-        //     };
-        //     return fetch('http://localhost:8091/openNewSession', options)
-        //         .then( res => res.json())
-        //         .then( res => console.log(res))
-        //         .catch(error => console.error(`Error: ${error}`))
-        //
-        // }
-
-
-        // $.ajax({
-        //     url:'http://localhost:8091/openNewSession',
-        //     type:"POST",
-        //     contentType: "application/json; charset=utf-8",
-        //     data: JSON.stringify(check), //Stringified Json Object
-        //     async: false,    //Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation
-        //     cache: false,    //This will force requested pages not to be cached by the browser
-        //     processData:false, //To avoid making query String instead of JSON
-        //     success: function(resposeJsonObject){
-        //        console.log("success")
-        //     }
-        // });
-        //
 
 
     }
