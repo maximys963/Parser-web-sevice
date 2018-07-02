@@ -207,8 +207,19 @@ function validation() {
 }
 start.addEventListener('click', Run);
 function Run(){
-    if(__appstate === "initial" || __appstate === "paused" ){
+    if(__appstate === "initial" || __appstate === "paused" || __appstate === "stopped"){
+
+        if(__appstate === "stopped"){
+            axios.post('http://localhost:8091/resume', "simpleSession")
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
         __appstate = "started";
+
 
         let status = document.getElementById("progress");
         status.innerText = "start";
