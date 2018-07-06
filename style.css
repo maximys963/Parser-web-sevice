@@ -1,5 +1,5 @@
 body{
-    background: #2d3436;
+    background: #2c3e50;
 }
 .main-container{
     display: flex;
@@ -90,7 +90,7 @@ width: 100%;
 
 .menu > li{
     border: 1px solid lightgray;
-    background-color: #2d3436;
+    background-color: #2c3e50;
     color: lightgray;
     width: 33.3%;
     height: 50px;
@@ -120,7 +120,7 @@ td{
 th{
     border: 1px solid darkgrey;
     text-align: center;
-    background: dimgray;
+    background: #2c3e50;
     color: lightgray;
     padding: 10px 20px 10px 20px;
 }
