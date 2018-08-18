@@ -1,1 +1,1 @@
-Front-end from https://github.com/Hotshykhov/WebParser
+Front-end for https://github.com/Hotshykhov/WebParser
